@@ -1,0 +1,1 @@
+../update/_30extract-core.sh
