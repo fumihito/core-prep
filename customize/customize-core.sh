@@ -7,6 +7,8 @@ export MASTER=172.20.200.20
 export TARBALLNAME=ubuntu-core-12.04.3-core-i386_current.tar.gz
 export COREDOWNLOADURL=http://${MASTER}/ubuntu-core/${TARBALLNAME}
 export HTTP_PROXY
+## if you use arm-cross Ubuntu core, please uncomment.
+# export QEMU_USER_STATIC=qemu-arm-static
 
 export INSTALL_PACKAGES="less sudo isc-dhcp-client wget bash-completion net-tools iputils-ping"
 
