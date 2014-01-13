@@ -1,12 +1,13 @@
 How to setup your Ubuntu Core development environments.
 
+0) get Ubuntu Core tarball and Kernel tarball (use helper/*sh)
 1) ./format.sh /dev/sda YESDOIT
-2) cd ../update ; ./update-core.sh
+2) cd ../update ; ./update-core.sh (Ubuntu Core tarball) (Kernel tarball)
 3) sudo umount /mnt/root
 4) sudo mount /dev/sda4 /mnt/root
-5) bash _30extract-core.sh /tmp/_20get-tar.sh.*/ubuntu-core-12.04.3-core-i386_current.tar.gz
-6) bash _40setup-kernel.sh
-7) DEFAULTUSER=(yourname) DEfAULTPASS=(yourpassword) bash _60_configure_initialuser.sh
+5) bash _30extract-core.sh (Ubuntu Core tarball)
+6) KERNELNAME=(Kernel tarball) bash _40setup-kernel.sh
+7) DEFAULTUSER=(yourname) DEFAULTPASS=(yourpassword) bash _60_configure_initialuser.sh
 8) cp /etc/resolv.conf /mnt/root/etc; chroot /mnt/root; 
    apt-get install sudo less isc-dhcp-client ntp openssh-server
 9) reboot and boot with "core" or "sub".

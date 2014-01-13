@@ -2,7 +2,7 @@
 
 export COREDIR=/mnt/root
 export BOOTDIR=/mnt/boot
-export COREDIR_BOOT=${COREROOT}/boot
+export COREDIR_BOOT=${COREDIR}/boot
 
 export BOOTDEVICE=/dev/sda1
 export COREDEVICE=/dev/sda3

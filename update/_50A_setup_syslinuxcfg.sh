@@ -51,6 +51,7 @@ EOFEOFEFO
 
 ls -al  ${BOOTDIR}/syslinux.cfg 
 sha1sum ${BOOTDIR}/syslinux.cfg 
+cat     ${BOOTDIR}/syslinux.cfg 
 
 cp /usr/lib/syslinux/menu.c32 ${BOOTDIR}/
 
