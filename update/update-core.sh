@@ -1,5 +1,12 @@
 #!/bin/bash
 
+FILE=$1
+KERNELNAME=$2
+export MASTER=172.20.200.20
+export TARBALLNAME=ubuntu-core-12.04.3-core-i386_current.tar.gz
+echo ${KERNELNAME:=kernel_i386_current.tar} > /dev/null
+export KERNELNAME
+
 export COREDIR=/mnt/root
 export BOOTDIR=/mnt/boot
 export COREDIR_BOOT=${COREROOT}/boot
@@ -8,16 +15,12 @@ export BOOTDEVICE=/dev/sda1
 export COREDEVICE=/dev/sda3
 export SUBDEVICE=/dev/sda4
 
-export MASTER=172.20.200.20
-export TARBALLNAME=ubuntu-core-12.04.3-core-i386_current.tar.gz
 export COREDOWNLOADURL=http://${MASTER}/ubuntu-core/${TARBALLNAME}
-export KERNELNAME=kernel_i386_current.tar
 export KERNELDOWNLOADURL=http://${MASTER}/ubuntu-core/${KERNELNAME}
 
 export DEFAULTUSER=ubuntu
 export DEFAULTPASS=ubuntu
 
-FILE=$1
 
 #------------------------------------
 
