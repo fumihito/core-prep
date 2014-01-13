@@ -1,6 +1,6 @@
 How to setup your Ubuntu Core development environments.
 
-1) ./format.sh /dev/sda1 YESDOIT
+1) ./format.sh /dev/sda YESDOIT
 2) cd ../update ; ./update-core.sh
 3) sudo umount /mnt/root
 4) sudo mount /dev/sda4 /mnt/root
