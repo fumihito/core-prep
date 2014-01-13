@@ -8,20 +8,28 @@ How to setup your Ubuntu Core development environments.
 6) bash _40setup-kernel.sh
 7) DEFAULTUSER=(yourname) DEfAULTPASS=(yourpassword) bash _60_configure_initialuser.sh
 8) cp /etc/resolv.conf /mnt/root/etc; chroot /mnt/root; 
-   apt-get install sudo less isc-dhcp-client
+   apt-get install sudo less isc-dhcp-client ntp openssh-server
 9) reboot and boot with "core" or "sub".
    "core" : Pure Ubuntu Core 
    "sub"  : Your work env with Ubuntu Core.
 
-   In "sub" lands, you may want to setup Ubuntu Desktop, exec:
+In "sub" lands, you may want to setup Ubuntu Desktop, exec:
 
-      (edit /etc/apt/sources.list)
-      sudo apt-get update 
-      sudo apt-get install ntp
-      sudo apt-get install ubuntu-desktop 
-      sudo apt-get install virtualbox-guest-utils
+    (edit /etc/network/interfaces [1])
+    (edit /etc/apt/sources.list [2])
+    sudo apt-get update 
+    sudo apt-get install ubuntu-desktop 
+    sudo apt-get install virtualbox-guest-utils
 
-sample of /etc/apt/sources.list::
+[1] sample of /etc/network/interfaces::
+
+    # interfaces(5) file used by ifup(8) and ifdown(8)
+    auto lo
+    iface lo inet loopback
+    auto eth0
+    iface eth0 inet dhcp
+
+[2] sample of /etc/apt/sources.list::
 
     deb http://jp.archive.ubuntu.com/ubuntu/ precise main restricted
     deb-src http://jp.archive.ubuntu.com/ubuntu/ precise main restricted
