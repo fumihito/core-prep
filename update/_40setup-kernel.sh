@@ -17,11 +17,14 @@ echo KERNELNAME=${KERNELNAME:=kernel_i386_current.tar} > ${DEBUGOUT}
 echo KERNELDOWNLOADURL=${KERNELDOWNLOADURL:=http://${MASTER}/ubuntu-core/${KERNELNAME}} > ${DEBUGOUT}
 echo COREROOT=${COREROOT:=/mnt/root}                   > ${DEBUGOUT}
 
-TEMPDIR=`mktemp -d`
-wget ${KERNELDOWNLOADURL} -O ${TEMPDIR}/${KERNELNAME} -o /dev/null
+if [ -f ${KERNELNAME} ] ;then
+    cp ${KERNELNAME} ${TEMPDIR}/ 
+else
+    wget ${KERNELDOWNLOADURL} -O ${KERNELNAME} -o /dev/null
+fi
 
 CHROOTTEMPDIR=`mktemp -d ${COREROOT}/tmp/kernelextract_XXXXX`
-tar axf ${TEMPDIR}/${KERNELNAME} -C ${CHROOTTEMPDIR}
+tar axf ${KERNELNAME} -C ${CHROOTTEMPDIR}
 chroot ${COREROOT} /bin/bash -c "cd ${CHROOTTEMPDIR##${COREROOT}} && mount -t proc proc /proc && dpkg -i *.deb ; umount /proc"
 
 rm -rf ${CHROOTTEMPDIR} ${TEMPDIR}
