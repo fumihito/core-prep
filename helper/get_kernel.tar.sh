@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#./_get_kernel_i386.tar.sh
-#./_get_kernel_amd64.tar.sh
-#
+./_get_kernel_i386.tar.sh
+./_get_kernel_amd64.tar.sh
+
 
 DEB_KERN_i386="\
     linux-headers-3.10.25-031025_3.10.25-031025.201312201135_all.deb \
