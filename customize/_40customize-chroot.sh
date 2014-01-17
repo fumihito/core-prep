@@ -37,7 +37,8 @@ chroot ${COREDIR} apt-get clean
 chroot ${COREDIR} apt-get update
 
 if [ -n "${INSTALL_PACKAGES}" ] ; then
-     chroot ${COREDIR} ${PROXY} apt-get install -y ${INSTALL_PACKAGES}
+     export ${PROXY}
+     chroot ${COREDIR} apt-get install -y ${INSTALL_PACKAGES}
 fi
 
 mkdir _installed_packages
