@@ -36,10 +36,20 @@ chroot ${COREDIR} mount -t proc proc /proc
 chroot ${COREDIR} apt-get clean
 chroot ${COREDIR} apt-get update
 
+# Faking up upstart commands, and install required packages.
+# "fake" commands prevent from unwanted service starting.
+# http://askubuntu.com/questions/74061/install-packages-without-starting-background-processes-and-services
+FAKEPATH=/root/fake
+INITFAKEPATH=${COREDIR}${FAKEPATH}
+mkdir -p ${INITFAKEPATH}
+    for i in service initctl invoke-rc.d restart start stop start-stop-daemon; do /bin/sh -c "ln -sf /bin/true ${INITFAKEPATH}/$i"
+done;
+
 if [ -n "${INSTALL_PACKAGES}" ] ; then
-     export ${PROXY}
-     chroot ${COREDIR} apt-get install -y ${INSTALL_PACKAGES}
+    export ${PROXY}
+    chroot ${COREDIR} /bin/sh -c "${PROXY} PATH=${FAKEPATH}:\$PATH apt-get install -y ${INSTALL_PACKAGES}"
 fi
+rm -rf ${INITFAKEPATH}
 
 mkdir _installed_packages
 cp ${COREDIR}/var/cache/apt/archives/*.deb _installed_packages/
