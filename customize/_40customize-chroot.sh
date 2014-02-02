@@ -17,13 +17,16 @@ echo ${HTTP_PROXY:=""}             > ${DEBUGOUT}
 echo ${INSTALL_PACKAGES:="sudo"}   > ${DEBUGOUT}
 echo ${QEMU_USER_STATIC:=""}       > ${DEBUGOUT}
 
+echo  ${PRE_SCRIPTS_DIR:="_customize_prescripts"}  > ${DEBUGOUT}
+echo ${POST_SCRIPTS_DIR:="_customize_postscripts"} > ${DEBUGOUT}
+
 if [ -z $HTTP_PROXY ]; then
     PROXY=""
 else
     PROXY="HTTP_PROXY=${HTTP_PROXY}"
 fi
 
-# create environment
+### - create chrootenvironment ------------------------
 cp /etc/resolv.conf ${COREDIR}/etc/
 # copy qemu-user-static for cross-arch.
 if [ -n "${QEMU_USER_STATIC}" ] ; then
@@ -31,9 +34,22 @@ if [ -n "${QEMU_USER_STATIC}" ] ; then
     cp "${QEMU_USER_STATIC_PATH}" "${COREDIR}/${QEMU_USER_STATIC_PATH}"
 fi
 
+# pre-mount
 chroot ${COREDIR} mount -t proc proc /proc
 chroot ${COREDIR} mount -t devpts devpts /dev/pts
 
+### - start customize ------------------------
+
+echo '=== Executing pre-scripts ==='
+PRE_SCRIPTS_DEST=${COREDIR}/root/pre-scripts/
+mkdir -p                 ${PRE_SCRIPTS_DEST}
+cp -a ${PRE_SCRIPTS_DIR} ${PRE_SCRIPTS_DEST}/
+chroot ${COREDIR} /bin/sh -c "find ${PRE_SCRIPTS_DEST}/${PRE_SCRIPTS_DIR} -name '*.sh'| xargs echo ###CRIT : Found ignored scripts in pre-scripts phase, run-parts does not support dot filename!!"
+chroot ${COREDIR} /bin/sh -c "ls -al ${PRE_SCRIPTS_DEST}/${PRE_SCRIPTS_DIR}"
+chroot ${COREDIR} /bin/sh -c "run-parts --verbose /root/pre-scripts/${PRE_SCRIPTS_DIR} 2>&1"
+rm -rf                   ${PRE_SCRIPTS_DEST}
+
+echo '=== Executing apt related installations ==='
 chroot ${COREDIR} apt-get clean
 chroot ${COREDIR} apt-get update
 
@@ -52,11 +68,20 @@ if [ -n "${INSTALL_PACKAGES}" ] ; then
 fi
 rm -rf ${INITFAKEPATH}
 
+echo '=== Executing post-scripts ==='
+POST_SCRIPTS_DEST=${COREDIR}/root/post-scripts/
+mkdir -p                  ${POST_SCRIPTS_DEST}
+cp -a ${POST_SCRIPTS_DIR} ${POST_SCRIPTS_DEST}/
+chroot ${COREDIR} /bin/sh -c "find ${POST_SCRIPTS_DEST}/${POST_SCRIPTS_DIR} -name '*.sh'| xargs echo ###CRIT : Found ignored scripts in post-scripts phase, run-parts does not support dot filename!!"
+chroot ${COREDIR} /bin/sh -c "ls -al ${POST_SCRIPTS_DEST}/${POST_SCRIPTS_DIR}"
+chroot ${COREDIR} /bin/sh -c "run-parts --verbose /root/post-scripts/${POST_SCRIPTS_DIR} 2>&1"
+rm -rf                    ${POST_SCRIPTS_DEST}
+
 mkdir _installed_packages
 cp ${COREDIR}/var/cache/apt/archives/*.deb _installed_packages/
 chroot ${COREDIR} apt-get clean
 
-# destroy environment
+### - destroy chrootenvironment ------------------------
 chroot ${COREDIR} umount /dev/pts
 chroot ${COREDIR} umount /proc
 if [ -n "${QEMU_USER_STATIC}" ] ; then
