@@ -22,7 +22,8 @@ if [ "x_${WHOAMI}" != "x_root" ]; then
     exit 1
 fi
 
-
+umount ${COREDIR}/proc
+umount ${COREDIR}/dev/pts
 bash _10mount-fs.sh
 
 echo FILE=${FILE:=`bash _20get-tar.sh`}
