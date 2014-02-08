@@ -7,7 +7,7 @@ Ubuntu Core Preparation Scripts
 prereq
 ----------------
 
-- i386 {real/virtual} hardware
+- amd64 {real/virtual} hardware
 - 20GB+ storages
 
 1. setup
@@ -30,7 +30,7 @@ prereq:
 -----------------------------------
 
  $ cd helper
- $ get_ubuntu-core-12.04.3-core-i386_current.tar.gz.sh
+ $ get_ubuntu-core-12.04.3-core-amd64_current.tar.gz.sh
  $ get_kernel.tar.sh
 
 4. install cutomized Ubuntu Core
