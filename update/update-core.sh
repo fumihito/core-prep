@@ -3,7 +3,7 @@
 FILE=$1
 KERNELNAME=$2
 export MASTER=172.20.200.20
-export TARBALLNAME=ubuntu-core-12.04.3-core-amd64_current.tar.gz
+export TARBALLNAME=ubuntu-core-12.04.4-core-amd64_current.tar.gz
 echo ${KERNELNAME:=kernel_amd64_current.tar} > /dev/null
 export KERNELNAME
 
