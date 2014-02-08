@@ -32,6 +32,7 @@ if [ -n "${QEMU_USER_STATIC}" ] ; then
 fi
 
 chroot ${COREDIR} mount -t proc proc /proc
+chroot ${COREDIR} mount -t devpts devpts /dev/pts
 
 chroot ${COREDIR} apt-get clean
 chroot ${COREDIR} apt-get update
@@ -56,7 +57,8 @@ cp ${COREDIR}/var/cache/apt/archives/*.deb _installed_packages/
 chroot ${COREDIR} apt-get clean
 
 # destroy environment
-chroot ${COREDIR} umount -t proc proc /proc
+chroot ${COREDIR} umount /dev/pts
+chroot ${COREDIR} umount /proc
 if [ -n "${QEMU_USER_STATIC}" ] ; then
     rm "${COREDIR}/${QEMU_USER_STATIC_PATH}"
 fi
