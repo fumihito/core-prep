@@ -12,8 +12,8 @@ if [ "x_${WHOAMI}" != "x_root" ]; then
 fi
 
 echo ${DEBUGOUT:=/dev/null} > /dev/null
-echo MASTER=${MASTER:=172.20.200.20}                   > ${DEBUGOUT}
-echo KERNELNAME=${KERNELNAME:=kernel_i386_current.tar} > ${DEBUGOUT}
+echo MASTER=${MASTER:=172.20.200.20}                    > ${DEBUGOUT}
+echo KERNELNAME=${KERNELNAME:=kernel_amd64_current.tar} > ${DEBUGOUT}
 echo KERNELDOWNLOADURL=${KERNELDOWNLOADURL:=http://${MASTER}/ubuntu-core/${KERNELNAME}} > ${DEBUGOUT}
 echo COREROOT=${COREROOT:=/mnt/root}                   > ${DEBUGOUT}
 

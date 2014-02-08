@@ -4,7 +4,7 @@ export COREDIR=/mnt/root
 export BOOTDIR=/mnt/boot
 
 export MASTER=172.20.200.20
-export TARBALLNAME=ubuntu-core-12.04.3-core-i386_current.tar.gz
+export TARBALLNAME=ubuntu-core-12.04.3-core-amd64_current.tar.gz
 export COREDOWNLOADURL=http://${MASTER}/ubuntu-core/${TARBALLNAME}
 export HTTP_PROXY
 ## if you use arm-cross Ubuntu core, please uncomment.
@@ -22,7 +22,8 @@ if [ "x_${WHOAMI}" != "x_root" ]; then
     exit 1
 fi
 
-
+umount ${COREDIR}/proc
+umount ${COREDIR}/dev/pts
 bash _10mount-fs.sh
 
 echo FILE=${FILE:=`bash _20get-tar.sh`}
