@@ -81,11 +81,7 @@ mkdir _installed_packages
 cp ${COREDIR}/var/cache/apt/archives/*.deb _installed_packages/
 chroot ${COREDIR} apt-get clean
 
-<<<<<<< HEAD
-# destroy environment
-=======
 ### - destroy chrootenvironment ------------------------
->>>>>>> 0f440e5f3fc8892ef38a3826cecc12e30587e129
 chroot ${COREDIR} umount /dev/pts
 chroot ${COREDIR} umount /proc
 if [ -n "${QEMU_USER_STATIC}" ] ; then
