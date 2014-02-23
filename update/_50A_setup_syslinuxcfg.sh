@@ -19,35 +19,54 @@ echo BOOTDEVICE=${BOOTDEVICE:=/dev/sda1} > ${DEBUGOUT}
 echo COREDEVICE=${COREDEVICE:=/dev/sda3} > ${DEBUGOUT}
 echo SUBDEVICE=${SUBDEVICE:=/dev/sda4}   > ${DEBUGOUT}
 
-# search vmlinux/initrd for preparation
+# setup BOOTDIR(probably /mnt/boot).
 VMLINUZ_FULLPATH=`find ${COREDIR_BOOT}/ -name 'vmlinuz*'`
-VMLINUZ="${VMLINUZ_FULLPATH##${COREDIR_BOOT}/}"
-
 INITRD_FULLPATH=`find ${COREDIR_BOOT}/ -name 'initrd*'`
-INITRD="${INITRD_FULLPATH##${COREDIR_BOOT}/}"
-
-# setup BOTODIR(probably /mnt/boot).
 cp ${VMLINUZ_FULLPATH} ${BOOTDIR}/
 cp ${INITRD_FULLPATH} ${BOOTDIR}/
 
-cat > ${BOOTDIR}/syslinux.cfg <<EOFEOFEFO 
+CORE_VMLINUZ_FULLPATH=`find ${COREDIR_BOOT}/ -name 'vmlinuz*'| head -n1`
+CORE_INITRD_FULLPATH=`find ${COREDIR_BOOT}/ -name 'initrd*'| head -n1`
+CORE_VMLINUZ="${CORE_VMLINUZ_FULLPATH##${COREDIR_BOOT}/}"
+CORE_INITRD="${CORE_INITRD_FULLPATH##${COREDIR_BOOT}/}"
+
+SYSLINUX=${BOOTDIR}/syslinux.cfg
+cat > ${SYSLINUX} <<EOFEOFEFO 
 UI menu.c32
 MENU TITLE Ubuntu Core Boot Menu
 
 PROMPT 0
 TIMEOUT 30
-DEFAULT core
-
+DEFAULT sub
 LABEL core
-	LINUX  ${VMLINUZ}
+	LINUX  ${CORE_VMLINUZ}
 	APPEND root=${COREDEVICE} ro
-	INITRD ${INITRD}
-
+	INITRD ${CORE_INITRD}
 LABEL sub
-	LINUX  ${VMLINUZ}
+	LINUX  ${CORE_VMLINUZ}
 	APPEND root=${SUBDEVICE} ro
-	INITRD ${INITRD}
+	INITRD ${CORE_INITRD}
 EOFEOFEFO
+
+
+# search vmlinux/initrd for preparation
+for VMLINUZ_FILE in ${VMLINUZ_FULLPATH}; do 
+    VMLINUZ="${VMLINUZ_FILE##${COREDIR_BOOT}/}"
+    KERNVER+="${VMLINUZ##vmlinuz-} "
+done
+
+for i in ${KERNVER}; do 
+cat >> ${SYSLINUX} <<EOFEOFEFO 
+LABEL CORE-$i
+	LINUX  vmlinuz-$i
+	APPEND root=${COREDEVICE} ro
+	INITRD initrd.img-$i
+LABEL SUB-$i
+	LINUX  vmlinuz-$i
+	APPEND root=${SUBDEVICE} ro
+	INITRD initrd.img-$i
+EOFEOFEFO
+done
 
 ls -al  ${BOOTDIR}/syslinux.cfg 
 sha1sum ${BOOTDIR}/syslinux.cfg 
