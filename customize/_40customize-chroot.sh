@@ -44,8 +44,8 @@ echo '=== Executing pre-scripts ==='
 PRE_SCRIPTS_DEST=${COREDIR}/root/pre-scripts/
 mkdir -p                 ${PRE_SCRIPTS_DEST}
 cp -a ${PRE_SCRIPTS_DIR} ${PRE_SCRIPTS_DEST}/
-chroot ${COREDIR} /bin/sh -c "find ${PRE_SCRIPTS_DEST}/${PRE_SCRIPTS_DIR} -name '*.sh'| xargs echo ###CRIT : Found ignored scripts in pre-scripts phase, run-parts does not support dot filename!!"
-chroot ${COREDIR} /bin/sh -c "ls -al ${PRE_SCRIPTS_DEST}/${PRE_SCRIPTS_DIR}"
+chroot ${COREDIR} /bin/sh -c "find ${PRE_SCRIPTS_DEST}/${PRE_SCRIPTS_DIR} -name '*.sh' 2> /dev/null | xargs echo ###CRIT : Found ignored scripts in pre-scripts phase, run-parts does not support .sh filename!!"
+chroot ${COREDIR} /bin/sh -c "ls -al              /root/pre-scripts/${PRE_SCRIPTS_DIR}"
 chroot ${COREDIR} /bin/sh -c "run-parts --verbose /root/pre-scripts/${PRE_SCRIPTS_DIR} 2>&1"
 rm -rf                   ${PRE_SCRIPTS_DEST}
 
