@@ -30,7 +30,7 @@ fi
 cp /etc/resolv.conf ${COREDIR}/etc/
 # copy qemu-user-static for cross-arch.
 if [ -n "${QEMU_USER_STATIC}" ] ; then
-    "$QEMU_USER_STATIC_PATH"=`which "${QEMU_USER_STATIC}"`
+    QEMU_USER_STATIC_PATH=`which "${QEMU_USER_STATIC}"`
     cp "${QEMU_USER_STATIC_PATH}" "${COREDIR}/${QEMU_USER_STATIC_PATH}"
 fi
 
